@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: Bio Scan Video Upload API
+  description: API for uploading bioscan video files, and the results will be sent via the webhook which you have configured.
+  version: 1.0.0
+  contact:
+    name: Sharat Krishnagiri
+    email: sharat@cortiqahealth.com0.0
+servers:
+  - url: http://api.coheal.ai/v1
+    description:  The production server hosts the live version of the Coheal API. Please note that any requests made to this server will affect live data and should be handled with caution.
+  - url: http://sandbox.api.coheal.ai/v1
+    description: The sandbox server hosts a testing environment for the Coheal API. Use this server for development, testing, and experimentation without affecting live data on the production server.
+
+paths:
+  /upload-bio-scan-video:
+    post:
+      summary: Upload Bio Scan Video
+      description: Uploads a bio scan video and processes it
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                partnerId:
+                  type: string
+                  description: ID of the partner
+                dob:
+                  type: string
+                  format: date
+                  description: Date of birth (YYYY-MM-DD)
+                gender:
+                  type: string
+                  description: Gender of the individual (male, female, other)
+                file:
+                  type: string
+                  format: binary
+                  description: The bio scan video file
+                callbackParams:
+                  type: object
+                  description: Additional callback parameters
+      responses:
+        '200':
+          description: Bio scan video uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates if the upload was successful
+                  id:
+                    type: string
+                    description: ID of the uploaded bio scan
+                  message:
+                    type: string
+                    description: Confirmation message
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates if the request failed
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Type of error
+                        msg:
+                          type: string
+                          description: Error message
+                        path:
+                          type: string
+                          description: Path of the error
+                        location:
+                          type: string
+                          description: Location of the error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates if the request failed due to unauthorized access
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Type of error
+                        msg:
+                          type: string
+                          description: Error message
+                        path:
+                          type: string
+                          description: Path of the error
+                        location:
+                          type: string
+                          description: Location of the error
+      security:
+        - apiKey: []
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
