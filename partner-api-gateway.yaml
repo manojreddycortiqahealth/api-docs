@@ -113,7 +113,7 @@ paths:
                     description: Error message.
       callbacks:
         onData:
-          '{$configuredCallbackUrl}':
+          'Webhook URL which you configured in the portal.':
             post:
               requestBody:
                 description: subscription payload
@@ -124,7 +124,7 @@ paths:
                       properties:
                         success:
                           type: boolean
-                          description: Indicates if the fetch was successful.
+                          description: Indicates if the processing was successful.
                         data:
                           type: object
                           description: Bio scan results data.
