@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Bio Scan Video Upload API
-  description: API for uploading bioscan video files, and the results will be sent via the webhook which you have configured.
+  title: Bio Scan API
+  description: API for uploading bio scan videos and fetching bio scan results from the database.
   version: 1.0.0
   contact:
     name: Sharat Krishnagiri
@@ -16,7 +16,7 @@ paths:
   /upload-bio-scan-video:
     post:
       summary: Upload Bio Scan Video
-      description: Uploads a bio scan video and processes it
+      description: Uploads a bio scan video and processes it.
       requestBody:
         required: true
         content:
@@ -26,24 +26,24 @@ paths:
               properties:
                 partnerId:
                   type: string
-                  description: ID of the partner
+                  description: ID of the partner.
                 dob:
                   type: string
                   format: date
-                  description: Date of birth (YYYY-MM-DD)
+                  description: Date of birth (YYYY-MM-DD).
                 gender:
                   type: string
-                  description: Gender of the individual (male, female, other)
+                  description: Gender of the individual (male, female, other).
                 file:
                   type: string
                   format: binary
-                  description: The bio scan video file
+                  description: The bio scan video file.
                 callbackParams:
                   type: object
-                  description: Additional callback parameters
+                  description: Additional callback parameters.
       responses:
         '200':
-          description: Bio scan video uploaded successfully
+          description: Bio scan video uploaded successfully.
           content:
             application/json:
               schema:
@@ -51,15 +51,15 @@ paths:
                 properties:
                   success:
                     type: boolean
-                    description: Indicates if the upload was successful
+                    description: Indicates if the upload was successful.
                   id:
                     type: string
-                    description: ID of the uploaded bio scan
+                    description: ID of the uploaded bio scan.
                   message:
                     type: string
-                    description: Confirmation message
+                    description: Confirmation message.
         '400':
-          description: Bad request
+          description: Bad request.
           content:
             application/json:
               schema:
@@ -67,7 +67,7 @@ paths:
                 properties:
                   success:
                     type: boolean
-                    description: Indicates if the request failed
+                    description: Indicates if the request failed.
                   errors:
                     type: array
                     items:
@@ -75,18 +75,18 @@ paths:
                       properties:
                         type:
                           type: string
-                          description: Type of error
+                          description: Type of error.
                         msg:
                           type: string
-                          description: Error message
+                          description: Error message.
                         path:
                           type: string
-                          description: Path of the error
+                          description: Path of the error.
                         location:
                           type: string
-                          description: Location of the error
+                          description: Location of the error.
         '401':
-          description: Unauthorized
+          description: Unauthorized.
           content:
             application/json:
               schema:
@@ -94,7 +94,64 @@ paths:
                 properties:
                   success:
                     type: boolean
-                    description: Indicates if the request failed due to unauthorized access
+                    description: Indicates if the request failed due to unauthorized access.
+                  error:
+                    type: string
+                    description: Error message.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates if the request failed.
+                  error:
+                    type: string
+                    description: Error message.
+  /bio-scan-results/{scanId}:
+    get:
+      summary: Fetch Bio Scan Results
+      description: Fetches bio scan results from the database.
+      parameters:
+        - in: path
+          name: scanId
+          required: true
+          schema:
+            type: string
+          description: ID of the bio scan result to fetch.
+        - in: query
+          name: partnerId
+          required: true
+          schema:
+            type: string
+          description: ID of the partner associated with the bio scan result.          
+      responses:
+        '200':
+          description: Bio scan results fetched successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates if the fetch was successful.
+                  data:
+                    type: object
+                    description: Bio scan results data.
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates if the request failed.
                   errors:
                     type: array
                     items:
@@ -102,18 +159,42 @@ paths:
                       properties:
                         type:
                           type: string
-                          description: Type of error
+                          description: Type of error.
                         msg:
                           type: string
-                          description: Error message
+                          description: Error message.
                         path:
                           type: string
-                          description: Path of the error
+                          description: Path of the error.
                         location:
                           type: string
-                          description: Location of the error
-      security:
-        - apiKey: []
+                          description: Location of the error.
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates if the request failed due to unauthorized access.
+                  error:
+                    type: string
+                    description: Error message.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates if the request failed.
+                  error:
+                    type: string
+                    description: Error message.
 components:
   securitySchemes:
     apiKey:
