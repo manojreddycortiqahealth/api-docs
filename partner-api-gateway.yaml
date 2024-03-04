@@ -111,6 +111,27 @@ paths:
                   error:
                     type: string
                     description: Error message.
+      callbacks:
+        onData:
+          '{$configuredCallbackUrl}':
+            post:
+              requestBody:
+                description: subscription payload
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        success:
+                          type: boolean
+                          description: Indicates if the fetch was successful.
+                        data:
+                          type: object
+                          description: Bio scan results data.
+              responses:
+                '200':
+                  description: |
+                      If the data was received successfully, your server should return the HTTP status code 200. Your server isn’t required to return a data value. If your server responds with any status code other than 200, the system considers the post unsuccessful. We will retry every 10 minutes for a day for all unsuccessful requests.                 
   /bio-scan-results/{scanId}:
     get:
       summary: Fetch Bio Scan Results

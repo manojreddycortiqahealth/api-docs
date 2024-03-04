@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "data": {
+    "callbackParams": { "a": "b" },
+    "id": "FzYooUw0g2EDIj37t6XV",
+    "heartRate": { "value": 82, "unit": "bpm" },
+    "systolic": { "value": 104, "unit": "mmHg" },
+    "diastolic": { "value": 67, "unit": "mmHg" },
+    "glucose": { "value": 111, "unit": "mg/dL" },
+    "spo2": { "value": 97, "unit": "mg/dL" }
+  }
+}
